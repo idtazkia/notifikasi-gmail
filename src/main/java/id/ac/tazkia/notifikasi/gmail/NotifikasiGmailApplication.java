@@ -1,4 +1,4 @@
-package id.ac.tazkia.notifikasi.gmail.notifikasigmail;
+package id.ac.tazkia.notifikasi.gmail;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
