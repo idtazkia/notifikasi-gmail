@@ -14,6 +14,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.SendAs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +38,7 @@ public class GmailApiService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GmailApiService.class);
 
     private static final List<String> SCOPES =
-            Arrays.asList(GmailScopes.GMAIL_COMPOSE, GmailScopes.GMAIL_SEND);
+            Arrays.asList(GmailScopes.GMAIL_COMPOSE, GmailScopes.GMAIL_SEND, GmailScopes.GMAIL_SETTINGS_BASIC);
 
     @Value("${gmail.credential}")
     private String credentialFile;
@@ -83,6 +84,14 @@ public class GmailApiService {
         gmail = new Gmail.Builder(httpTransport, jsonFactory, gmailCredential)
                 .setApplicationName(applicationName)
                 .build();
+
+        LOGGER.info("Setting displayName [{}] for account [{}]", senderDisplayName, senderGmailAccount);
+        gmail.users().settings().sendAs()
+                .patch(
+                    "me",
+                    senderGmailAccount,
+                        new SendAs().setDisplayName(senderDisplayName))
+                .execute();
     }
 
     public void send(String to, String subject, String body)  {
