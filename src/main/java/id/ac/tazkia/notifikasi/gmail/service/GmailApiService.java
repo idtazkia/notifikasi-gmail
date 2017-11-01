@@ -91,9 +91,11 @@ public class GmailApiService {
             Properties props = new Properties();
             Session session = Session.getDefaultInstance(props, null);
 
+            InternetAddress from = new InternetAddress(senderGmailAccount, senderDisplayName);
+            InternetAddress destination = new InternetAddress(to);
             MimeMessage email = new MimeMessage(session);
-            email.setFrom(new InternetAddress(senderGmailAccount, senderDisplayName));
-            email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
+            email.setFrom(from);
+            email.addRecipient(javax.mail.Message.RecipientType.TO, destination);
             email.setSubject(subject);
             email.setContent(body, "text/html; charset=utf-8");
 
@@ -105,7 +107,7 @@ public class GmailApiService {
             message.setRaw(encodedEmail);
 
             message = gmail.users().messages().send("me", message).execute();
-            LOGGER.debug("Sent email with id {}", message.getId());
+            LOGGER.info("Email {} from {} to {} with subject {}", message.getId(), from, destination, subject);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
