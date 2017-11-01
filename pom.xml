@@ -5,11 +5,32 @@
 
 	<groupId>id.ac.tazkia.notifikasi.gmail</groupId>
 	<artifactId>notifikasi-gmail</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${revision}</version>
 	<packaging>jar</packaging>
 
 	<name>notifikasi-gmail</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Kirim Notifikasi Melalui Gmail</description>
+
+	<scm>
+		<url>https://github.com/idtazkia/notifikasi-gmail</url>
+		<connection>scm:git:https://github.com/idtazkia/notifikasi-gmail.git</connection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>endymuhardin</id>
+			<name>Endy Muhardin</name>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://github.com/idtazkia/notifikasi-gmail/blob/master/LICENSE</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -19,6 +40,7 @@
 	</parent>
 
 	<properties>
+		<revision>1.0.0-RELEASE</revision>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
@@ -74,6 +96,23 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<configuration>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-scm-plugin</artifactId>
+				<version>1.9.4</version>
+				<configuration>
+					<tag>${project.artifactId}-${project.version}</tag>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
