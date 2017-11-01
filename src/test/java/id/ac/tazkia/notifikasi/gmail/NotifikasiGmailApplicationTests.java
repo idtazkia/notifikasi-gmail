@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,7 +29,7 @@ public class NotifikasiGmailApplicationTests {
                 .copyToString(mailTemplate.getInputStream(),
                 Charset.forName("UTF-8"));
         gmailApiService.send("endy@tazkia.ac.id",
-                "Selamat Datang di Aplikasi Notifikasi",
+                "Selamat Datang di Aplikasi Notifikasi "+ LocalDateTime.now().toString(),
                 emailTemplate);
     }
 
