@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.mail.Session;
@@ -85,16 +86,9 @@ public class GmailApiService {
                 .setApplicationName(applicationName)
                 .build();
 
-        LOGGER.info("Setting displayName [{}] for account [{}]", senderDisplayName, senderGmailAccount);
-        gmail.users().settings().sendAs()
-                .patch(
-                    "me",
-                    senderGmailAccount,
-                        new SendAs().setDisplayName(senderDisplayName))
-                .execute();
     }
 
-    public void send(String to, String subject, String body)  {
+    public void send(String sender, String to, String subject, String body)  {
 
         try {
             Properties props = new Properties();
@@ -115,10 +109,25 @@ public class GmailApiService {
             Message message = new Message();
             message.setRaw(encodedEmail);
 
+            if(StringUtils.hasText(sender)){
+                setSenderName(sender);
+            }
+
             message = gmail.users().messages().send("me", message).execute();
             LOGGER.info("Email {} from {} to {} with subject {}", message.getId(), from, destination, subject);
+            setSenderName(senderDisplayName);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    private void setSenderName(String sender) throws Exception {
+        LOGGER.info("Setting displayName [{}] for account [{}]", sender, senderGmailAccount);
+        gmail.users().settings().sendAs()
+                .patch(
+                        "me",
+                        senderGmailAccount,
+                        new SendAs().setDisplayName(sender))
+                .execute();
     }
 }

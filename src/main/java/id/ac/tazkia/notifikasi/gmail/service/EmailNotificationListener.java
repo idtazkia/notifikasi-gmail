@@ -21,11 +21,12 @@ public class EmailNotificationListener {
         try {
             EmailRequest emailRequest = objectMapper.readValue(message, EmailRequest.class);
             logger.debug("====== Email Request ======");
+            logger.debug("From : {}", emailRequest.getFrom());
             logger.debug("To : {}", emailRequest.getTo());
             logger.debug("Subject : {}", emailRequest.getSubject());
             logger.debug("Body : {}", emailRequest.getBody());
             logger.debug("====== Email Request ======");
-            gmailApiService.send(emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getBody());
+            gmailApiService.send(emailRequest.getFrom(), emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getBody());
         } catch (Exception err){
             logger.error(err.getMessage(), err);
         }
