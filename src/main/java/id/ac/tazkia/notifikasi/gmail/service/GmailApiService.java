@@ -14,7 +14,6 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
-import com.google.api.services.gmail.model.SendAs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +38,7 @@ public class GmailApiService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GmailApiService.class);
 
     private static final List<String> SCOPES =
-            Arrays.asList(GmailScopes.GMAIL_COMPOSE, GmailScopes.GMAIL_SEND, GmailScopes.GMAIL_SETTINGS_BASIC);
+            Arrays.asList(GmailScopes.GMAIL_SEND);
 
     @Value("${gmail.credential}")
     private String credentialFile;
@@ -90,11 +89,15 @@ public class GmailApiService {
 
     public void send(String sender, String to, String subject, String body)  {
 
+        if(!StringUtils.hasText(sender)){
+            sender = senderDisplayName;
+        }
+
         try {
             Properties props = new Properties();
             Session session = Session.getDefaultInstance(props, null);
 
-            InternetAddress from = new InternetAddress(senderGmailAccount, senderDisplayName);
+            InternetAddress from = new InternetAddress(senderGmailAccount, sender);
             InternetAddress destination = new InternetAddress(to);
             MimeMessage email = new MimeMessage(session);
             email.setFrom(from);
@@ -109,25 +112,11 @@ public class GmailApiService {
             Message message = new Message();
             message.setRaw(encodedEmail);
 
-            if(StringUtils.hasText(sender)){
-                setSenderName(sender);
-            }
-
             message = gmail.users().messages().send("me", message).execute();
             LOGGER.info("Email {} from {} to {} with subject {}", message.getId(), from, destination, subject);
-            setSenderName(senderDisplayName);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
 
-    private void setSenderName(String sender) throws Exception {
-        LOGGER.info("Setting displayName [{}] for account [{}]", sender, senderGmailAccount);
-        gmail.users().settings().sendAs()
-                .patch(
-                        "me",
-                        senderGmailAccount,
-                        new SendAs().setDisplayName(sender))
-                .execute();
-    }
 }

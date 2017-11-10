@@ -30,7 +30,7 @@ public class NotifikasiGmailApplicationTests {
         String emailTemplate = StreamUtils
                 .copyToString(mailTemplate.getInputStream(),
                 Charset.forName("UTF-8"));
-        gmailApiService.send("Test Notifikasi","endy@tazkia.ac.id",
+        gmailApiService.send("Test Notifikasi Email","endy@tazkia.ac.id",
                 "Selamat Datang di Aplikasi Notifikasi "+ LocalDateTime.now().toString(),
                 emailTemplate);
     }
