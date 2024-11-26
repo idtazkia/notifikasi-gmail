@@ -1,5 +1,6 @@
 application-dev.properties
 
+.vscode
 .DS_Store
 .mvn
 mvnw*

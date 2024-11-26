@@ -1,20 +1,18 @@
 package id.ac.tazkia.notifikasi.gmail;
 
 import id.ac.tazkia.notifikasi.gmail.service.GmailApiService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
 public class NotifikasiGmailApplicationTests {
