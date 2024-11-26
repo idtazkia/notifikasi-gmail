@@ -40,7 +40,7 @@
 	</parent>
 
 	<properties>
-		<revision>1.1.0-RELEASE</revision>
+		<revision>2024.11.1-RELEASE</revision>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>21</java.version>
